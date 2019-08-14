@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Shipperhq_ShipperTest>
+            <version>0.1.0</version>
+        </Shipperhq_ShipperTest>
+    </modules>
+    <phpunit>
+        <suite>
+            <modules>
+                <Shipperhq_ShipperTest />
+            </modules>
+        </suite>
+    </phpunit>
+</config>

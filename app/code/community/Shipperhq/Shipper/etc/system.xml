@@ -1,0 +1,286 @@
+<?xml version="1.0"?>
+<!--
+/**
+*
+* Webshopapps Shipping Module
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Open Software License (OSL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/osl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@magentocommerce.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade Magento to newer
+* versions in the future. If you wish to customize Magento for your
+* needs please refer to http://www.magentocommerce.com for more information.
+*
+* Shipper HQ Shipping
+*
+* @category ShipperHQ
+* @package ShipperHQ_Shipping_Carrier
+* @copyright Copyright (c) 2014 Zowta LLC (http://www.ShipperHQ.com)
+* @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+* @author ShipperHQ Team sales@shipperhq.com
+*/
+-->
+<config>
+    <sections>
+        <carriers translate="label" module="shipping">
+            <groups>
+                <shipper translate="label">
+                    <label>ShipperHQ</label>
+                    <frontend_model>shipperhq_shipper/adminhtml_carrier_about</frontend_model>
+                    <sort_order>2</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment>
+                        <![CDATA[
+                     This extension connects Magento to ShipperHQ, a powerful, easy-to-use eCommerce shipping management platform. <br />
+                    For documentation and examples, please see the <a href="http://docs.shipperhq.com" target="_blank">ShipperHQ knowledge base</a>.<br /><br />
+                    If you have questions about ShipperHQ or need support, visit <a href="http://www.ShipperHQ.com" target="_blank">http://www.ShipperHQ.com</a>.<br />
+                    ShipperHQ is a product of <a href="http://www.webshopapps.com" target="_blank">WebShopApps</a>, developers of powerful shipping solutions for Magento. <br />
+                ]]>
+                    </comment>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <title>
+                            <label>Main Shipping Carrier Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Name of the main shipping carrier, also used for carrier title if no rates can be
+                                found. This is updated dynamically from ShipperHQ
+                            </comment>
+                        </title>
+                        <heading_shipperhq translate="label">
+                            <label>ShipperHQ Configuration</label>
+                            <frontend_model>shipperhq_shipper/adminhtml_carrier_heading</frontend_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_shipperhq>
+                        <environment_scope translate="label comment">
+                            <label>Environment Scope</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>shipperhq_shipper/adminhtml_system_config_source_environmentscope
+                            </source_model>
+                            <sort_order>150</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Select the relevant environment scope for ShipperHQ configuration settings
+                            </comment>
+                        </environment_scope>
+                        <api_key>
+                            <label>API Key</label>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <sort_order>170</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Obtain from under Websites in the ShipperHQ Dashboard</comment>
+                        </api_key>
+                        <password>
+                            <label>Authentication Code</label>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <sort_order>180</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Obtain from under Websites in the ShipperHQ Dashboard</comment>
+                        </password>
+                        <refresh_methods translate="label">
+                            <label>Refresh Shipping Methods</label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_model>shipperhq_shipper/adminhtml_carrier_refreshcarriers</frontend_model>
+                            <button_label>Refresh Now</button_label>
+                            <sort_order>190</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </refresh_methods>
+                        <backup_carrier translate="label">
+                            <label>Backup Shipping Carrier/Method</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>shipperhq_shipper/adminhtml_system_config_source_carriers</source_model>
+                            <sort_order>195</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>In the unlikely event that ShipperHQ is unavailable, configure a backup carrier to
+                                display.
+                                This carrier should be configured but left disabled
+                            </comment>
+                        </backup_carrier>
+                        <heading_advanced translate="label">
+                            <label>Advanced Settings</label>
+                            <frontend_model>shipperhq_shipper/adminhtml_carrier_heading</frontend_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_advanced>
+                     <!--   <item_attributes translate="label">
+                            <label>Custom Item Attribute Codes</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>320</sort_order>
+                            <tooltip>
+                                Pass extra item attributes to ShipperHQ.
+                                This should be the attribute code, E.g if you wanted the freight ship price you would
+                                use freight_ship_price.
+                                You can specify multiple attributes by comma separating them.
+                            </tooltip>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </item_attributes> -->
+                        <custom_admin  translate="label">
+                            <label>Custom Shipping Rates in Admin</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>340</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <tooltip>Add fields to specify a custom shipping rate for orders placed in admin</tooltip>
+                        </custom_admin>
+                        <hide_notify translate="label comment">
+                            <label>Hide Carrier Notifications at Checkout</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>350</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <tooltip>
+                                Carriers may include notifications when their live rates have been modified. Set to yes if you wish to hide these notifications.
+                            </tooltip>
+                        </hide_notify>
+                        <display_transaction translate="label comment">
+                            <label>Display Transaction ID</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>360</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>
+                                Set to no unless advised by ShipperHQ team, used for debugging purposes
+                            </comment>
+                        </display_transaction>
+                        <sandbox_mode translate="label comment">
+                            <label>Sandbox Mode</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>365</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Set to Yes to use ShipperHQ Sandbox URL</comment>
+                        </sandbox_mode>
+                        <url>
+                            <label>Sandbox URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>370</sort_order>
+                            <depends><sandbox_mode>1</sandbox_mode></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </url>
+                        <live_url translate="label">
+                            <label>Live URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>380</sort_order>
+                            <depends><sandbox_mode>0</sandbox_mode></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </live_url>
+                        <secure_url translate="label">
+                            <label>Secure URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>390</sort_order>
+                            <depends><sandbox_mode>0</sandbox_mode></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </secure_url>
+                        <heading_std_ship translate="label">
+                            <label>Standard Shipping</label>
+                            <frontend_model>shipperhq_shipper/adminhtml_carrier_heading</frontend_model>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_std_ship>
+                        <sallowspecific translate="label">
+                            <label>Ship to Applicable Countries</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>410</sort_order>
+                            <frontend_class>shipping-applicable-country</frontend_class>
+                            <source_model>adminhtml/system_config_source_shipping_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sallowspecific>
+                        <specificcountry translate="label">
+                            <label>Ship to Specific Countries</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>420</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </specificcountry>
+                        <showerrors translate="label">
+                            <label>Show Method if Not Applicable</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>430</sort_order>
+                            <frontend_class>shipping-skip-hide</frontend_class>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </showerrors>
+                        <specificerrmsg translate="label">
+                            <label>Displayed Error Message</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>440</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>
+                                This error message will be displayed if no error message
+                                is returned from ShipperHQ
+                            </comment>
+                        </specificerrmsg>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>450</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                    </fields>
+                </shipper>
+            </groups>
+        </carriers>
+    </sections>
+</config>

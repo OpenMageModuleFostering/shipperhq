@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<shipperhq_migrate>
+    <modules>
+        <dropship>
+            <title>WebShopApps Dropship Migration</title>
+            <module>Webshopapps_Dropship</module>
+            <attributes>
+                <!-- this name must be the "from" attribute code-->
+                <warehouse>
+                    <name>warehouse</name>
+                    <type>select</type>
+                    <from>
+                        <code>warehouse</code>
+                        <title>Warehouse</title>
+                        <type>select</type>
+                    </from>
+                    <to>
+                        <code>shipperhq_warehouse</code>
+                        <title>Origin</title>
+                        <type>multiselect</type>
+                    </to>
+                </warehouse>
+            </attributes>
+        </dropship>
+        <!-- module end -->
+        <ship_override>
+            <title>WebShopApps Shipping Override Migration</title>
+            <module>Webshopapps_Shippingoverride2</module>
+            <attributes>
+                <shipping_price>
+                    <name>Shipping Price/Fee</name>
+                    <type>text</type>
+                    <from>
+                        <code>shipping_price</code>
+                        <title>Shipping Price</title>
+                        <type>text</type>
+                    </from>
+                    <to>
+                        <code>shipperhq_shipping_fee</code>
+                        <title>Shipping Fee</title>
+                        <type>text</type>
+                    </to>
+                </shipping_price>
+                <special_shipping_group>
+                    <name>Special Shipping Group</name>
+                    <type>select</type>
+                    <from>
+                        <code>special_shipping_group</code>
+                        <title>Special Shipping Group</title>
+                        <type>select</type>
+                    </from>
+                    <to>
+                        <code>shipperhq_shipping_group</code>
+                        <title>ShipperHQ Shipping Group</title>
+                        <type>multiselect</type>
+                    </to>
+                </special_shipping_group>
+            </attributes>
+        </ship_override>
+        <freight_common>
+            <title>WebShopApps Freight Shipping</title>
+            <module>Webshopapps_Wsafreightcommon</module>
+            <attributes>
+                <nmfc_class>
+                    <name>NMFC Class</name>
+                    <type>text</type>
+                    <from>
+                        <code>nmfc_class</code>
+                        <title>NMFC Class</title>
+                        <type>text</type>
+                    </from>
+                    <to>
+                        <code>shipperhq_nmfc_class</code>
+                        <title>ShipperHQ NMFC Class</title>
+                        <type>text</type>
+                    </to>
+                </nmfc_class>
+                <nmfc_sub>
+                    <name>NMFC Sub Class</name>
+                    <type>text</type>
+                    <from>
+                        <code>nmfc_sub</code>
+                        <title>NMFC Sub Class</title>
+                        <type>text</type>
+                    </from>
+                    <to>
+                        <code>shipperhq_shipping_group</code>
+                        <title>ShipperHQ NMFC Sub Class</title>
+                        <type>text</type>
+                    </to>
+                </nmfc_sub>
+            </attributes>
+        </freight_common>
+    </modules>
+</shipperhq_migrate>

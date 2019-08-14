@@ -1,0 +1,82 @@
+1.0 - Initial release
+1.1 - Integration update
+1.1 - Release Candidate
+1.2 - Release candidate update
+1.3 - Release
+1.4 - Release Candidate
+1.5 - Pickup preselect in multi address checkout
+1.6 - SHIPPERHQ-441 - Calendar display issues resolved
+1.7 - SHIPPERHQ-466 - Ajax modifications on calendar templates, SHIPPERHQ-415 UK Date Support
+1.8 - SHIPPERHQ-318 - carrier code support, SHIPPERHQ-486 - Discounted item logic
+1.9 - CHEF-108 - Rate request modifications
+1.10 - CHEF-108 - Removed FreeMethodWeight from request
+1.11 - CHEF-110 - Resolved duplicated date in MAC for calendar based rates
+1.12 - SHIPPERHQ-531 - rerequest rates for Pickup carriers to retrieve correct time slots
+	   SHIPPERHQ-507 - added appVersion to the request
+1.13 - SHIPPERHQ-566 - defaults match Dashboard defaults
+1.14 - SHIPPERHQ-577 - Set up default account that will work when the extension is installed
+1.15 - SHIPPERHQ-605 - add ship_box_tolerance attribute and updated some shipperhq attributes to store scope
+1.16 - SHIPPERHQ-641 - added template helper to check for SHQ enabled and return default template if not enabled
+	   SHIPPERHQ-640 - added check for ShipperHQ carrier enabled before attempting to retrieve carriers on config save
+	   SHIPPERHQ-632 - ship separately dependent on rule group not set
+1.17 - SHIPPERHQ-669 - template helper for OSC files. Removed erroneous log messages
+
+1.18  - SHIPPERHQ-611 - Display date selector by default for single calendar carrier in OPC
+1.19  - SHIPPERHQ-764 - implemented currency conversion. DRY changes, SHIPPERHQ-801 - resolve template if statement for pickup rates, SHIPPERHQ-747 - removed free shipping product attribute, SHIPPERHQ-669 - template helper for OSC files. Removed erroneous log messages, SHIPPERHQ-801 - resolve template if statement for pickup rates, SHIPPERHQ-609 - assign carriergroup id to all items and check for display merged on MA checkout, SHIPPERHQ-782 - Adapted processing for merged rate response
+1.20  - SHIPPERHQ-632 - dynamic configuration option display for dimensional attributes
+1.21  - SHIPPERHQ-831 - City field mandatory when autocomplete enabled
+1.22  - SHIPPERHQ-743 - ignore date formatting when comparing date strings
+1.23  - SHIPPERHQ-660 pickup elements hidden for updated rates, pickup elements listener for updated rates on checkout and save shipping method on admin order submit
+1.24  - SHIPPERHQ-889 - removed re-request of rates on OSC submit
+1.25  - SHIPPERHQ-659 default date support
+1.26  - SHIPPERHQ-931 Calendar admin order observer config, SHIPPERHQ-911 sort order on carriers
+1.27  - SHIPPERHQ-968 city required on cart
+1.28  - SHIPPERHQ-937 - removed delivery date string from shipping description, SHIPPERHQ-968 removed city enabled in cart for specific client, SHIPPERHQ-969 - registered shipment items when shipping
+1.29  - SHIPPERHQ-1042 - save default values for display from cart to checkout and on save shipping method, SHIPPERHQ-1041 - accessorial display cache corrected, SHIPPERHQ-1042 - display of selected on admin and customer account, SHIPPERHQ-1041 - accessorial display cache corrected
+1.30  - SHIPPERHQ-1058 Tagging here as not sure on status
+1.31  - SHIPPERHQ-1066 - resolved display of acc on 1.9 cart
+1.32  - SHIPPERHQ-1106 - sort by price
+1.34  - SHIPPERHQ-973, SHIPPERHQ-1165 - display updates
+1.38  - SHIPPERHQ-1101 - configurable item weight display
+1.41  - SHIPPERHQ-1184 - PayPal Express shipping method display patch
+1.46  - SHIPPERHQ-1205 - installation script modifications
+1.50  - SHIPPERHQ-1268, SHIPPERHQ-1269 - installation script modifications
+1.57  - SHIPPERHQ-1258, SHIPPERHQ-1315, SHIPPERHQ-1289 - optional caching of rates, modified attribute seperator in request
+1.58  - SHIPPERHQ-1339 - Freight accessorial changes
+1.63  - SHIPPERHQ-1424 - moved attribute source to base module
+1.64  - SHIPPERHQ-1460 - move carriergroup logic, SHIPPERHQ-1373 Pitney and GSO support
+1.65  - SHIPPERHQ-1442 - store specific credentials
+2.0   - PITNEY-5 - modified request for new address fields
+2.3   - SHIPPERHQ-1508 - display selected dates and time at checkout for review
+2.4   - SHIPPERHQ-1556 - Address validation dialog correction on shipping address
+2.7   - SHIPPERHQ-1616 - correct filtering for store id in orders grid
+2.10  - SHIPPERHQ-1630 - Freight accessorials support for split, SHIPPERHQ-1639 - Merged function logic in templates
+2.12  - SHIPPERHQ-1628 - Accessorial defaults in cart
+2.15  - SHIPPERHQ-1631 - Destination type support on address validation
+2.18  - SHIPPERHQ-1701 - OSC pre selected show elements
+2.20  - SHIPPERHQ-1710, SHIPPERHQ-1709 - OSC support changes, SHIPPERHQ-1689 include virtual items in cart
+2.21  - SHIPPERHQ-1717 Bundle parent carriergroup ID
+2.22  - SHIPPERHQ-1721 Support for security patch SUPEE-6788
+2.23  - SHIPPERHQ-1716 city field enabled via config, SHIPPERHQ-1731 freight accessorials defaults not being used
+2.25  - SHIPPERHQ-1556 support split custom admin shipping and added address type to request as lower case, PITNEY-14 additional logging
+2.27  - SHIPPERHQ-1765 custom rate description implemented
+2.28  - SHIPPERHQ-1765 amend custom rate description implementation, SHIPPERHQ-1326 date support for en-GB locale
+2.30  - SHIPPERHQ-1808 removed dimensions from dimensional rule group restrictions
+2.31  - PITNEY-16 Amended product catalog upload logic
+2.32  - SHIPPERHQ-1823 address validation results on existing addresses, PITNEY-17 - amended order of tax totals
+2.33  - SHIPPERHQ-1826 Shipping detail display for multi address orders
+2.34  - SHIPPERHQ-1842 Master packing boxes support, SHIPPERHQ-1862 time slot on order email, SHIPPERHQ-1863 MAC bundle gift options support
+2.39  - SHQ16-208 - Rate caching amendments, SHIPPERHQ-1899 amended city required in cart
+2.44  - SHQ16-142 - Extended migration tool
+2.46  - SHQ16-477 Freight migrate values from legacy freight extensions
+2.47  - SHQ16-503 - Custom admin shipping support for free shipping
+2.48  - SHQ16-169 - Record delivery date formatted against shipping address
+2.49  - SHQ16-477 further migrations for freight legacy extensions
+2.50  - SHQ16-538 OSC support for v4.0.9
+2.51  - SHQ16-488 Accessorial support in admin
+2.53  - SHQ16-598 Shipment packages created specific to shipping rates
+
+
+
+
+

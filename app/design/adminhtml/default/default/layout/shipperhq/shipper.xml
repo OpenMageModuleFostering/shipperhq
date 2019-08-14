@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!--
+/**
+ *
+ * Webshopapps Shipping Module
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * Shipper HQ Shipping
+ *
+ * @category ShipperHQ
+ * @package ShipperHQ_Shipping_Carrier
+ * @copyright Copyright (c) 2014 Zowta LLC (http://www.ShipperHQ.com)
+ * @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @author ShipperHQ Team sales@shipperhq.com
+ */
+-->
+<layout version="0.1.0">
+    <adminhtml_shqsynchronize_index>
+        <reference name="content">
+            <block type="shipperhq_shipper/adminhtml_synchronize" name="synchronize" />
+        </reference>
+    </adminhtml_shqsynchronize_index>
+
+    <default>
+        <reference name="notifications">
+                <block type="shipperhq_shipper/adminhtml_synchronize_notify" name="synchronize_notify" template="shipperhq/shipper/synchronize/notify.phtml"></block>
+        </reference>
+    </default>
+    <adminhtml_catalog_product_edit>
+        <reference name="js">
+            <block type="core/template" name="shipperhq_shipper.product_edit" template="shipperhq/shipper/catalog/product/edit/shipping.phtml">
+            </block>
+        </reference>
+    </adminhtml_catalog_product_edit>
+    <adminhtml_catalog_product_new>
+        <reference name="js">
+            <block type="core/template" name="shipperhq_shipper.product_edit" template="shipperhq/shipper/catalog/product/edit/shipping.phtml">
+            </block>
+        </reference>
+    </adminhtml_catalog_product_new>
+
+    <adminhtml_sales_order_create_index>
+        <reference name="head">
+            <action method="addJs">
+                <name>shipperhq/jquery-loader.js</name>
+            </action>
+        </reference>
+        <update handle="shipperhq_admin_order_create_block"/>
+        <reference name="shipping_method">
+            <action method="setHideMethods"><flag>1</flag></action>
+        </reference>
+        <reference name="content">
+            <block type="core/template" template="shipperhq/frontend/js/bottom.phtml" name="shipperhq.jquery.bottom.end" />
+        </reference>
+    </adminhtml_sales_order_create_index>
+
+    <shipperhq_admin_order_create_block>
+        <reference name="shipping_method">
+            <block name="form" as="form"
+                   type="shipperhq_frontend/adminhtml_sales_order_create_shipping_method_form"
+                   template="shipperhq/frontend/sales/order/create/shipping_method/available.phtml">
+            </block>
+        </reference>
+    </shipperhq_admin_order_create_block>
+
+    <adminhtml_sales_order_create_load_block_data>
+        <update handle="shipperhq_admin_order_create_block"/>
+    </adminhtml_sales_order_create_load_block_data>
+    <adminhtml_sales_order_create_load_block_shipping_method>
+        <update handle="shipperhq_admin_order_create_block"/>
+    </adminhtml_sales_order_create_load_block_shipping_method>
+</layout>

@@ -1,0 +1,56 @@
+config:
+  default/carriers/fastway/active: 1
+  default/carriers/fastway/userid: testuser
+  default/carriers/fastway/apikey: 1deee3f85dcc8e72162120a115dba51d
+  default/carriers/fastway/depot: CNS
+  default/carriers/fastway/max_package_weight: 25
+eav:
+  catalog_product:
+    - entity_id: 10
+      sku: PROD_1
+      type_id: simple
+      name: Product 1
+      description: Product 1
+      short_description: Product 1
+      price: 10.00
+      weight: 1
+      freight_class: 55
+      stock:
+        qty: 100
+        in_stock: 1
+      status: 1             # Enabled
+      visibility: 4
+    - entity_id: 20
+      sku: PROD_2
+      name: Product 2
+      description: Product 2
+      short_description: Product 2
+      price: 15.00
+      weight: 50
+      freight_class: 55
+      stock:
+        qty: 100
+        in_stock: 1
+      status: 1             # Enabled
+      visibility: 4
+tables:
+  sales/quote:
+    - entity_id: 1
+      store_id: 1
+  sales/quote_address:
+    - address_id: 1
+      quote_id: 1
+      firstname: John
+      lastname: Doe
+      street: 1 Street, apt 1
+      city: Somewhere
+  sales/quote_item:
+    - item_id: 1
+      quote_id: 1
+      product_id: 10
+      qty: 2
+    - item_id: 2
+      quote_id: 1
+      product_id: 20
+      qty: 3
+

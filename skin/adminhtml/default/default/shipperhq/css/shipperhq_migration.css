@@ -1,0 +1,10 @@
+.grid .migration {
+    width:60%;
+    border:1px
+    solid #cbd3d4;
+    border-bottom:none;
+}
+
+.migration_outer {
+    width:80%;
+}

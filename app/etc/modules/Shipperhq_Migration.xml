@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Shipperhq_Migration>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Shipperhq_Shipper />
+            </depends>
+        </Shipperhq_Migration>
+    </modules>
+</config>

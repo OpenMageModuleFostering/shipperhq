@@ -1,0 +1,12 @@
+<?xml version="1.0"?> 
+<config> 
+    <modules> 
+        <Shipperhq_Pbint>
+            <active>true</active> 
+            <codePool>community</codePool>
+	    <depends>
+        </depends>
+        </Shipperhq_Pbint>
+    </modules> 
+</config> 
+

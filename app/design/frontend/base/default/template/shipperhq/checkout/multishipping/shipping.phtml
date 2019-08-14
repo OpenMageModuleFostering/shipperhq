@@ -1,0 +1,222 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ *
+ * Webshopapps Shipping Module
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * Shipper HQ Shipping
+ *
+ * @category ShipperHQ
+ * @package ShipperHQ_Shipping_Carrier
+ * @copyright Copyright (c) 2014 Zowta LLC (http://www.ShipperHQ.com)
+ * @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @author ShipperHQ Team sales@shipperhq.com
+ */
+
+?>
+<?php
+/**
+ * Multishipping checkout shipping template
+ *
+ * @see Mage_Checkout_Block_Multishipping_Shipping
+ */
+?>
+<div class="multiple-checkout">
+    <div class="page-title">
+        <h1><?php echo $this->__('Select Shipping Method') ?></h1>
+    </div>
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="shipping_method_form">
+        <?php $uniqueGiftMessage = 999; ?>
+        <?php foreach ($this->getAddresses() as $_index => $_address): ?>
+            <?php $pickupPreselected = $_address->getPickupPreselected(); ?>
+            <?php $carrierGroupRates = $this->getCarrierGroupRates($_address); ?>
+            <?php $isSplit = count($carrierGroupRates) > 1; ?>
+            <?php $cgCount = 1; ?>
+            <?php $totalCarrierGroups = count($carrierGroupRates); ?>
+            <?php foreach($carrierGroupRates as $cgkey => $_ratesAndShipInfo): ?>
+                <?php $additionalPrefix = 'ma'.$_address->getId(); ?>
+                <?php $shippingPrefix = $_address->getId(); ?>
+                <?php if($isSplit):?>
+                    <?php $additionalPrefix .= 'ZZ' .$cgkey; ?>
+                    <?php $shippingPrefix .= 'ZZ' .$cgkey; ?>
+                <?php endif; ?>
+                <?php $_shippingRateGroups = $_ratesAndShipInfo['shipping']; ?>
+                <div class="col2-set">
+                    <h2 class="legend"><?php echo $this->__('Address %s of %s', ($_index+1), $this->getAddressCount()) ; if($isSplit && $_ratesAndShipInfo['carriergroup_text'] != '' ) echo $this->__(' - %s %s of %s ', $_ratesAndShipInfo['carriergroup_text'], $cgCount, $totalCarrierGroups) ?></h2>
+                    <div class="col-1 col-narrow">
+                        <div class="box">
+                            <div class="box-title">
+                                <h3><?php echo $this->__('Shipping To') ?> <span class="separator">|</span> <a href="<?php echo $this->getAddressEditUrl($_address) ?>"><?php echo $this->__('Change') ?></a></h3>
+                            </div>
+                            <div class="box-content">
+                                <?php if($pickupPreselected): ?>
+                                    <address><?php echo $this->getPickupAddress(); ?></address>
+                                <?php else: ?>
+                                    <address><?php echo $_address->format('html') ?></address>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <div class="box box-sp-methods">
+                            <div class="pointer"></div>
+                            <div class="box-title">
+                                <h3><?php echo $this->__('Shipping Method') ?></h3>
+                            </div>
+                            <div class="box-content">
+                                <?php if (!($_shippingRateGroups) || count($_shippingRateGroups) < 1): ?>
+                                    <p><?php echo $this->__('Sorry, no quotes are available for this order at this time.') ?></p>
+                                <?php else: ?>
+                                    <dl class="sp-methods">
+                                        <?php $this->setCurrentAddress($_address); ?>
+                                        <?php $shippingCodePrice = array(); ?>
+                                        <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
+                                            <?php $showCarrierNotice = false; ?>
+                                            <?php $isPickupCarrier = $this->isPickupCarrier($_rates[0]); ?>
+                                            <?php if($pickupPreselected && !$isPickupCarrier): ?>
+                                                <?php continue; ?>
+                                            <?php endif; ?>
+                                            <dt><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></dt>
+                                            <dd>
+                                                <?php $calendarRates = (Mage::helper('shipperhq_shipper')->isModuleEnabled('Shipperhq_Calendar') && Mage::helper('shipperhq_calendar')->hasCalendarDetails($additionalPrefix, $code, $_rates[0]->getCarrierType())); ?>
+                                                <?php if($_rates[0]->getCustomDescription()): ?>
+                                                    <p class="disclaimer" id="disclaimer_<?php echo $additionalPrefix ?>_<?php echo $code ?>" name="disclaimer_<?php echo $additionalPrefix ?>"><?php echo $_rates[0]->getCustomDescription(); ?></p>
+                                                <?php endif; ?>
+                                                <ul>
+                                                    <?php if($calendarRates || $isPickupCarrier): ?>
+                                                        <div id="ship_options_<?php echo $additionalPrefix ?>_<?php echo $code ?>"?>
+                                                        <div id="radio_choices_<?php echo $additionalPrefix ?>_<?php echo $code ?>">
+                                                    <?php endif ?>
+                                                    <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
+                                                        <li<?php if ($_rate->getErrorMessage()) echo ' class="error-msg"' ?>>
+                                                            <?php if ($_rate->getErrorMessage()): ?>
+                                                                <?php echo $this->escapeHtml($_rate->getCarrierTitle()) ?>: <?php echo $this->escapeHtml($_rate->getErrorMessage()) ?>
+                                                            <?php else: ?>
+                                                                <?php if($_rate->getCarrierNotice() && !$showCarrierNotice): ?>
+                                                                    <?php $showCarrierNotice = $_rate->getCarrierNotice(); ?>
+                                                                <?php endif ?>
+                                                               <?php if ($_sole) : ?>
+                                                                    <span class="no-display"><input type="radio" name="shipping_method[<?php echo $shippingPrefix ?>]" value="<?php echo $this->htmlEscape($_rate->getCode()) ?>" id="s_method_<?php echo $shippingPrefix ?>_<?php echo $_rate->getCode() ?>" checked="checked"/></span>
+                                                                <?php else: ?>
+                                                                    <input type="radio" name="shipping_method[<?php echo $shippingPrefix ?>]" value="<?php echo $this->htmlEscape($_rate->getCode()) ?>" id="s_method_<?php echo $shippingPrefix ?>_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod($_address)) echo ' checked="checked"' ?> class="radio" />
+                                                                <?php endif; ?>
+                                                                <label for="s_method_<?php echo $shippingPrefix ?>_<?php echo $_rate->getCode() ?>"><?php echo $this->getMethodTitle($_rate->getMethodTitle(), $_rate->getMethodDescription(), true) ?>
+                                                                    <?php $_excl = $this->getShippingPrice($_address, $_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
+                                                                    <?php $_incl = $this->getShippingPrice($_address, $_rate->getPrice(), true); ?>
+                                                                    <?php echo $_excl; ?>
+                                                                    <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                                                                        (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                                                                    <?php endif; ?>
+                                                                </label>
+                                                            <?php endif ?>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                    <?php if ($showCarrierNotice): ?>
+                                                        <p class="disclaimer" id="disclaimer_<?php echo $code ?>" ><?php echo $showCarrierNotice; ?></p>
+                                                    <?php endif ?>
+                                                    <?php if($calendarRates): ?>
+                                                        </div>
+                                                        </div>
+                                                        <?php echo $this->getCalendarHtml($additionalPrefix, $code) ?>
+                                                    <?php endif ?>
+                                                    <?php if ($isPickupCarrier): ?>
+                                                        </div>
+                                                        </div>
+                                                        <?php echo $this->getStorepickupHtml($code, $_rates[0]->getCarrierType(), $additionalPrefix); ?>
+                                                    <?php endif ?>
+                                                </ul>
+                                            </dd>
+                                        <?php endforeach; ?>
+                                    </dl>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 col-wide">
+                        <?php if($uniqueGiftMessage != $_index): ?>
+                            <?php echo $this->helper('giftmessage/message')->getInline('multishipping_adress_checkbox', $_address); ?>
+                        <?php endif; ?>
+                        <h3><?php echo $this->__('Items') ?> <span class="separator">|</span> <a href="<?php echo $this->getItemsEditUrl($_address) ?>"><?php echo $this->__('Edit Items') ?></a></h3>
+                        <table class="data-table" id="shipping-table-<?php echo $shippingPrefix ?>">
+                            <col />
+                            <col width="1" />
+                            <thead>
+                            <tr>
+                                <th><?php echo $this->__('Product Name') ?></th>
+                                <th class="a-center"><?php echo $this->__('Qty') ?></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php if(isset( $_ratesAndShipInfo['plain_item_list'])): ?>
+                                <?php foreach ($this->getAddressItemsGrouped($_address, $_ratesAndShipInfo['plain_item_list'], $cgkey) as $_item): ?>
+                                    <tr>
+                                        <td>
+                                            <?php echo $this->getItemHtml($_item->getQuoteItem()) ?>
+                                        </td>
+                                        <td class="a-center"><?php echo $_item->getQty() ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                            </tbody>
+                        </table>
+                        <script type="text/javascript">decorateTable('shipping-table-<?php echo $shippingPrefix ?>')</script>
+                        <?php if($uniqueGiftMessage != $_index): ?>
+                            <?php echo $this->helper('giftmessage/message')->getInline('multishipping_adress', $_address); ?>
+                            <?php $uniqueGiftMessage = $_index;?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php $cgCount++; ?>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
+        <?php echo $this->getChildHtml('checkout_billing_items') ?>
+        <div class="buttons-set">
+            <p class="back-link"><a href="<?php echo $this->getBackUrl() ?>"><small>&laquo; </small><?php echo $this->__('Back to Select Addresses') ?></a></p>
+            <button type="submit" title="<?php echo $this->__('Continue to Billing Information') ?>" class="button"><span><span><?php echo $this->__('Continue to Billing Information') ?></span></span></button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+    //]]>
+</script>

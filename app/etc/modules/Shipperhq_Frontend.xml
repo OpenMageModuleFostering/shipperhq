@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Shipperhq_Frontend>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Shipping />
+                <Shipperhq_Shipper />
+            </depends>
+        </Shipperhq_Frontend>
+    </modules>
+</config>

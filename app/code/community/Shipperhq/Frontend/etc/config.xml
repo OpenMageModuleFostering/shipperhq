@@ -1,0 +1,9 @@
+<config>
+    <global>
+        <blocks>
+            <shipperhq_frontend>
+                <class>Shipperhq_Frontend_Block</class>
+            </shipperhq_frontend>
+        </blocks>
+    </global>
+</config>

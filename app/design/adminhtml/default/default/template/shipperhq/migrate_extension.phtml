@@ -1,0 +1,138 @@
+<?php
+/**
+ *
+ * Webshopapps Shipping Module
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * Shipper HQ Shipping
+ *
+ * @category ShipperHQ
+ * @package ShipperHQ_Shipping_Carrier
+ * @copyright Copyright (c) 2014 Zowta LLC (http://www.ShipperHQ.com)
+ * @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @author ShipperHQ Team sales@shipperhq.com
+ */
+
+/**
+ * Shipper shipping model
+ *
+ * @category ShipperHQ
+ * @package ShipperHQ_Shipper
+ */
+?>
+<?php $moduleId = $this->getModuleId(); ?>
+<?php $store = $this->getStore(); ?>
+<?php $helperText = $this->getHelperText(); ?>
+<div id="migration_<?php echo $moduleId; ?>" name="migration_outer" title="<?php echo $this->getModuleTitle(); ?>" class="entry-edit migration_outer">
+    <div class ="entry-edit-head">
+        <h3 class="icon-head"><?php echo $this->getModuleTitle(); ?>
+            <?php if($helperText): ?>
+            <a class="link-store-scope" title="<?php echo $helperText; ?>"></a>
+            <?php endif; ?>
+        </h3>
+    </div>
+    <div class="fieldset">
+        <?php foreach ($this->getAttributes() as $attribute): ?>
+            <?php echo $this->getTableHtml($attribute, $store); ?>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+//<![CDATA[
+
+function migrateSelectClick(id, toid, totype)
+{
+    var info = $(id).select('select');
+    var migrateUrl = '<?php echo $this->getUrl('adminhtml/shqmigration_ajax/migrateSelect', array('_secure'=>true)) ?>';
+
+    var storeSwitcher = document.getElementById('store_switcher');
+    var storeId = '';
+    if(storeSwitcher) {
+        storeId = storeSwitcher.value;
+    }
+    var fieldsPrepare = {'attribute_code': id, 'to_attribute_code': toid, 'store' : storeId,
+        'attribute_to_type' : totype};
+    for(var i=0; i<info.length; i++){
+        var selectedOption = info[i].getValue();
+        if(selectedOption != '') {
+            fieldsPrepare[info[i].name] = selectedOption;
+        }
+    }
+
+    var request = new Ajax.Request(
+        migrateUrl,
+        {
+            method: 'get',
+            onComplete: publishResult,
+            parameters: fieldsPrepare
+        }
+    );
+}
+
+function migrateDefaultClick(id, toid)
+{
+    var storeSwitcher = document.getElementById('store_switcher');
+    var storeId = '';
+    if(storeSwitcher) {
+        storeId = storeSwitcher.value;
+    }
+
+    var fieldsPrepare = {'attribute_code': id, 'to_attribute_code': toid, 'store' : storeId};
+    var migrateUrl = '<?php echo $this->getUrl('adminhtml/shqmigration_ajax/migrateDefault', array('_secure'=>true)) ?>';
+
+    var request = new Ajax.Request(
+        migrateUrl,
+        {
+            method: 'get',
+            onComplete: publishResult,
+            parameters: fieldsPrepare
+        }
+    );
+}
+
+function publishResult(transport)
+{
+    var data = transport.responseText.evalJSON();
+    var attributeCode = data.attribute_code;
+    var migrateButton = document.getElementById(attributeCode + '_button');
+    if(migrateButton) {
+        migrateButton.disabled = true;
+        migrateButton.addClassName('disabled');
+    }
+
+    var resultDisplay = document.getElementById(attributeCode + '_output_result');
+    if(resultDisplay) {
+        if(data.error) {
+            resultDisplay.innerHTML = data.error;
+        }
+        else {
+            resultDisplay.innerHTML = data.number_updated + ' products updated';
+        }
+        resultDisplay.removeClassName('no-display');
+    }
+
+}
+//]]>
+</script>
+
+
+
+
+

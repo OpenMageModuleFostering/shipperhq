@@ -1,0 +1,109 @@
+<?php
+/*
+ * header
+ */?>
+<script type="text/javascript">
+    //<![CDATA[
+   function handleRuleGroupChange()
+    {
+        var ruleGroup = $("shipperhq_dim_group").value;
+        if(ruleGroup == '') {
+            $('ship_separately').up().up().show();
+        }
+        else {
+            $('ship_separately').up().up().hide();
+        }
+
+    }
+
+    function handleShipSeparatelyChange()
+    {
+        var shipSeparately = $("ship_separately").value;
+        if(shipSeparately == '0') {
+            $('shipperhq_dim_group').up().up().show();
+        }
+        else {
+            $('shipperhq_dim_group').up().up().hide();
+        }
+    }
+
+    function handlePossibleBoxesMultiselect()
+    {
+
+        var limit = false;
+        if($("ship_separately").value == '1') {
+            limit = 1;
+        }
+        var numberSelected = $$('#shipperhq_poss_boxes option:selected').length;
+        if(limit) {
+            if(numberSelected > limit) {
+                $('shipperhq_poss_boxes').selectedIndex = -1;
+                alert('If product is Ship Separately, you can only choose 1 possible packing box');
+            }
+        }
+        else {
+            if(numberSelected > 1) {
+               $("ship_separately").up().up().hide();
+            }
+            else {
+                var ruleGroup = $("shipperhq_dim_group").value;
+                if(ruleGroup == '') {
+                    $("ship_separately").up().up().show();
+                }
+            }
+        }
+
+    }
+
+    function handleMasterBoxesMultiselect()
+    {
+
+        var limit = false;
+        if($("ship_separately").value == '1') {
+            limit = 1;
+        }
+        var numberSelected = $$('#shipperhq_master_boxes option:selected').length;
+        if(limit) {
+            if(numberSelected > limit) {
+                $('shipperhq_master_boxes').selectedIndex = -1;
+                alert('If product is Ship Separately, you can only choose 1 master packing box');
+            }
+        }
+        else {
+            if(numberSelected > 1) {
+                $("ship_separately").up().up().hide();
+            }
+            else {
+                var ruleGroup = $("shipperhq_dim_group").value;
+                if(ruleGroup == '') {
+                    $("ship_separately").up().up().show();
+                }
+            }
+        }
+
+    }
+
+    document.observe("dom:loaded", function() {
+        if(document.contains($('shipperhq_dim_group'))) {
+            $("shipperhq_dim_group").observe("change", handleRuleGroupChange);
+            handleRuleGroupChange();
+        }
+
+        if(document.contains($('ship_separately'))) {
+            $("ship_separately").observe("change", handleShipSeparatelyChange);
+            handleShipSeparatelyChange();
+        }
+
+        if(document.contains($('shipperhq_poss_boxes'))) {
+            $("shipperhq_poss_boxes").observe("change", handlePossibleBoxesMultiselect);
+            handlePossibleBoxesMultiselect();
+        }
+
+        if(document.contains($('shipperhq_master_boxes'))) {
+            $("shipperhq_master_boxes").observe("change", handleMasterBoxesMultiselect);
+            handleMasterBoxesMultiselect();
+        }
+    });
+
+    //]]>
+</script>

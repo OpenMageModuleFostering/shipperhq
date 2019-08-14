@@ -1,0 +1,150 @@
+.onestepcheckout-shipping-method-block .location-select {
+    width: 225px;
+}
+
+.onestepcheckout-shipping-method-block .map_canvas {
+    width: 218px;
+    height: 150px;
+    padding: 0px 0px 0px 5px;
+}
+
+.box-content .location-select {
+    width: 229px;
+}
+
+.box-content .map_canvas {
+    width: 221px;
+    height: 150px;
+    padding: 0px 0px 0px 5px;
+}
+
+.map_canvas {
+    float: right;
+    width: 366px;
+    height: 150px;
+    padding: 0px 0px 0px 5px;
+}
+
+.shipping-method-select {
+    width: 230px;
+    margin-left: 10px;
+}
+
+.location-select {
+    width:80%;
+
+}
+
+.pickup-date-select {
+    width: 140px;
+}
+
+.opc select.pickup-slot-select {
+    width: 140px;
+}
+
+.location_address{
+    width: 300px;
+}
+
+
+.location_table {
+
+}
+
+.left {
+    float:left;
+}
+.right {
+    float: right;
+}
+.outer {
+    overflow: hidden;
+}
+.location {
+    padding: 2px 5px;
+}
+
+#co-shipping-method-form .sp-methods dd .location_label label {
+    min-width: 100px;
+    padding-left: 10px;
+}
+
+.location_calendar_container {
+    width: 280px;
+}
+
+.location .ui-datepicker-trigger {
+    display: inline;
+    padding-left: 5px;
+    font-size:20px;
+    height: 25px;
+    width: 25px;
+}
+
+.overlay-container
+{
+    position:relative;
+}
+
+.overlay-bg
+{
+    position:absolute;
+    width:19.2em;
+    height:195px;
+    background-color:transparent;
+    visibility: hidden;
+    z-index: 101;
+}
+
+.overlay-pickup
+{
+    position:absolute;
+    width:19.2em;
+    visibility: hidden;
+    z-index: 101;
+}
+
+.overlay-text
+{
+    position:relative;
+    top:45%;
+    left:15%;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.collapsable_heading {
+    cursor: pointer;
+    color: #696;
+    font-weight:bold;
+    background-image:url(../../../../default/default/images/i_desc_arrow.gif);
+    background-repeat:no-repeat;
+    text-indent:23px;
+    background-position:4px 8px;
+}
+.open {
+    background-image:url(../../../../default/default/images/i_asc_arrow.gif);
+    background-repeat:no-repeat;
+    text-indent:23px;
+    background-position:4px 8px;
+);
+}
+.trademark
+{
+    font-size:9px; /*Font Size of Trademark Text*/
+}
+
+.ups_logo
+{
+    height:36px;
+    width:30px;
+    padding: 10px 10px;
+
+}
+
+.disclaimer
+{
+    font-size:9px; /*Font Size of Trademark Text*/
+}
+

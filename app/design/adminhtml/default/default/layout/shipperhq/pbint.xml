@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <shipperhq_pbint_add_order_total>
+        <reference name="order_totals">
+            <block type="shipperhq_postorder/sales_order_duty" name="total_shqpbint_duty"/>
+        </reference>
+    </shipperhq_pbint_add_order_total>
+    <shipperhq_pbint_add_invoice_total>
+        <reference name="invoice_totals">
+            <block type="shipperhq_pbint/sales_order_duty" name="total_shqpbint_duty"/>
+        </reference>
+    </shipperhq_pbint_add_invoice_total>
+    <shipperhq_pbint_add_creditmemo_total>
+        <reference name="creditmemo_totals">
+            <block type="shipperhq_pbint/sales_order_duty" name="total_shqpbint_duty"/>
+        </reference>
+    </shipperhq_pbint_add_creditmemo_total>
+
+    <!--covered by postorder layout updates -->
+    <!--<adminhtml_sales_order_view>-->
+        <!--<update handle="shipperhq_pbint_add_order_total" />-->
+    <!--</adminhtml_sales_order_view>-->
+    <!--<adminhtml_sales_order_invoice_new>-->
+        <!--<update handle="shipperhq_pbint_add_invoice_total" />-->
+    <!--</adminhtml_sales_order_invoice_new>-->
+    <!--<adminhtml_sales_order_invoice_updateqty>-->
+        <!--<update handle="shipperhq_pbint_add_invoice_total" />-->
+    <!--</adminhtml_sales_order_invoice_updateqty>-->
+    <adminhtml_sales_order_invoice_view>
+        <update handle="shipperhq_pbint_add_invoice_total" />
+    </adminhtml_sales_order_invoice_view>
+    <!--<adminhtml_sales_order_creditmemo_new>-->
+        <!--<update handle="shipperhq_pbint_add_creditmemo_total" />-->
+    <!--</adminhtml_sales_order_creditmemo_new>-->
+    <!--<adminhtml_sales_order_creditmemo_updateqty>-->
+        <!--<update handle="shipperhq_pbint_add_creditmemo_total" />-->
+    <!--</adminhtml_sales_order_creditmemo_updateqty>-->
+    <adminhtml_sales_order_creditmemo_view>
+        <update handle="shipperhq_pbint_add_creditmemo_total" />
+    </adminhtml_sales_order_creditmemo_view>
+
+</layout>

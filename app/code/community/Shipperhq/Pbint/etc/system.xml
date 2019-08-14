@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <shipperhq translate="label" module="shipperhq_pbint">
+            <label>ShipperHQ<!--<![CDATA[ <img src="http://www.webshopapps.com/images/logos/WSA_OfficialLogo_HorizontalLockup.png" alt='WebShopApps' height='22' /> ]]> -->
+            </label>
+            <sort_order>300</sort_order>
+        </shipperhq>
+    </tabs>
+   <sections>
+       <shipperhqpitney translate="label" module="shipperhq_pbint">
+           <label>ShipperHQ Pitney Bowes International</label>
+           <tab>shipperhq</tab>
+           <sort_order>40</sort_order>
+           <show_in_default>1</show_in_default>
+           <show_in_website>1</show_in_website>
+           <show_in_store>1</show_in_store>
+           <groups>
+               <shqpbint translate="label" module="shipperhq_pbint">
+                   <label>ShipperHQ Pitney Bowes International</label>
+                   <frontend_type>text</frontend_type>
+                   <sort_order>1</sort_order>
+                   <show_in_default>1</show_in_default>
+                   <show_in_website>1</show_in_website>
+                   <show_in_store>1</show_in_store>
+                  <fields>
+                      <active translate="label">
+                          <label>Enabled</label>
+                          <frontend_type>select</frontend_type>
+                          <source_model>adminhtml/system_config_source_yesno</source_model>
+                          <sort_order>1</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </active>
+                      <merchantcode translate="label">
+                          <label>Merchant Code</label>
+                          <frontend_type>text</frontend_type>
+                          <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                          <sort_order>10</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </merchantcode>
+                       <ftpuser translate="label">
+                           <label>SFTP username</label>
+                           <frontend_type>text</frontend_type>
+                           <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                           <sort_order>40</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </ftpuser>
+                       <ftppass translate="label">
+                           <label>SFTP password</label>
+                           <frontend_type>password</frontend_type>
+                           <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                           <sort_order>50</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </ftppass>
+                       <ftphost translate="label">
+                           <label>SFTP hostname</label>
+                           <frontend_type>text</frontend_type>
+                           <sort_order>60</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </ftphost>
+                       <ftpport translate="label">
+                           <label>SFTP port</label>
+                           <frontend_type>text</frontend_type>
+                           <sort_order>70</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </ftpport>
+                       <ftpdir translate="label">
+                           <label>SFTP catalog directory</label>
+                           <frontend_type>text</frontend_type>
+                           <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                           <sort_order>80</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </ftpdir>
+                       <catalog_diff translate="label">
+                           <label>Catalog update period (hours, min 1 hour)</label>
+                           <frontend_type>text</frontend_type>
+                           <sort_order>90</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </catalog_diff>
+                       <catalog_full translate="label">
+                           <label>Full catalog upload period (days)</label>
+                           <frontend_type>text</frontend_type>
+                           <sort_order>100</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </catalog_full>
+                       <catalog_size translate="label">
+                           <label>Maximum Records Per File</label>
+                           <frontend_type>text</frontend_type>
+                           <validate>validate-number</validate>
+                           <sort_order>105</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </catalog_size>
+                       <catalog_sender_id translate="label">
+                           <label>Catalog Sender ID</label>
+                           <frontend_type>text</frontend_type>
+                           <sort_order>106</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </catalog_sender_id>
+                       <admin_email translate="label">
+                           <label>Admin Email</label>
+                           <frontend_type>text</frontend_type>
+                           <validate>validate-email</validate>
+                           <sort_order>110</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </admin_email>
+                       <catalog_encryption_enabled translate="label">
+                           <label>Catalog Encryption Enabled</label>
+                           <frontend_type>select</frontend_type>
+                           <source_model>adminhtml/system_config_source_yesno</source_model>
+                           <sort_order>115</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </catalog_encryption_enabled>
+                       <encryption_public_key translate="label">
+                           <label>Catalog Encryption Public Key</label>
+                           <frontend_type>textarea</frontend_type>
+                           <sort_order>120</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                       </encryption_public_key>
+                      <retrieve_credentials translate="label">
+                          <label>Upload to Pitney Bowes</label>
+                          <frontend_type>select</frontend_type>
+                          <frontend_model>shipperhq_pbint/adminhtml_system_upload</frontend_model>
+                          <button_label>Upload Catalog Now</button_label>
+                          <sort_order>150</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>0</show_in_website>
+                          <show_in_store>0</show_in_store>
+                      </retrieve_credentials>
+                   </fields>
+               </shqpbint>
+           </groups>
+       </shipperhqpitney>
+    </sections>
+</config>

@@ -1,0 +1,265 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category   design_default
+ * @package    Mage
+ * @copyright  Copyright (c) 2008 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *
+ * <?php if ($_rate->getErrorMessage()): ?>
+<ul class="messages"><li class="error-msg"><ul><li><?php echo $_rate->getErrorMessage() ?></li></ul></li></ul>
+<?php else: ?>
+ */
+/* @var $this Shipperhq_Frontend_Block_Checkout_Onepage_Shipping_Method_Available */
+?>
+<?php $_showTooltip = $this->showToolTips(); ?>
+<?php if (!$this->helper('shipperhq_shipper')->isModuleEnabled('Shipperhq_Splitrates') || count($this->getCarrierGroupRates()) <=1 || $this->helper('shipperhq_splitrates')->displayMergedCheckout() ): ?>
+    <?php if (!($_shippingRateGroups = $this->getShippingRates())): ?>
+        <strong><?php echo $this->__('Sorry, no quotes are available for this order at this time.') ?></strong>
+    <?php else: ?>
+        <input type=hidden id="transaction_id" value='<?php echo Mage::helper('shipperhq_shipper')->getTransactionId(); ?>' />
+        <dl class="sp-methods">
+            <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
+                <dt><?php echo $this->getCarrierName($code) ?>
+                    <?php $showCarrierNotice = false; ?>
+                    <?php if ($_showTooltip): ?>
+                        <b class="helpcursor" title="<?php echo $this->getToolTipText() ?>">
+                            <img src="<?php echo $this->getSkinUrl('images/shipperhq/tooltip.jpg') ?>">
+                        </b>
+                        <?php $_showTooltip = false; ?>
+                    <?php endif ?>
+                </dt>
+                <dd>
+                    <?php if(Mage::helper('shipperhq_shipper')->isModuleEnabled('Shipperhq_Calendar') && Mage::helper('shipperhq_calendar')->hasCalendarDetails('', $code, $_rates[0]->getCarrierType())) :?>
+                        <?php $calendarRates = true; ?>
+                    <?php else: ?>
+                        <?php $calendarRates = false; ?>
+                    <?php endif ?>
+                    <?php $isPickupCarrier = $this->isPickupCarrier($_rates[0]); ?>
+                    <?php $isFreightCarrier = $this->isFreightCarrier($_rates[0]); ?>
+                    <?php if($_rates[0]->getCustomDescription()): ?>
+                        <p class="disclaimer" id="disclaimer_<?php echo $code ?>" name="disclaimer"><?php echo $_rates[0]->getCustomDescription(); ?></p>
+                    <?php endif; ?>
+                    <ul>
+                        <?php if($calendarRates || $isPickupCarrier || $isFreightCarrier): ?>
+                            <div id="ship_options_<?php echo $code ?>"?>
+                                <div id="radio_choices_<?php echo $code ?>">
+                        <?php endif ?>
+                        <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
+                            <li>
+                                <?php if ($_rate->getErrorMessage()): ?>
+                                    <ul class="messages"><li class="error-msg"><ul><li><?php echo $_rate->getErrorMessage() ?></li></ul></li></ul>
+                                <?php else: ?>
+                                    <?php if($_rate->getCarrierNotice() && !$showCarrierNotice): ?>
+                                        <?php $showCarrierNotice = $_rate->getCarrierNotice(); ?>
+                                    <?php endif ?>
+                                    <?php if ($_sole) : ?>
+                                        <span class="no-display"><input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>" checked="checked" /></span>
+                                    <?php else: ?>
+                                        <input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod()) echo ' checked="checked"' ?> />
+                                    <?php endif ?>
+                                    <label for="s_method_<?php echo $_rate->getCode() ?>"><?php echo $this->getMethodTitle($_rate->getMethodTitle(), $_rate->getMethodDescription(), true) ?>
+                                        <strong>
+                                            <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
+                                            <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
+
+                                            <?php echo $_excl; ?>
+                                            <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                                                (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                                            <?php endif; ?>
+                                        </strong>
+                                    </label>
+                                <?php endif ?>
+                            </li>
+                        <?php endforeach; ?>
+                        <?php if($calendarRates): ?>
+                            </div>
+                            </div>
+                            <?php echo $this->getCalendarHtml('', $code, $_sole) ?>
+                        <?php endif ?>
+                        <?php if($isPickupCarrier || $isFreightCarrier): ?>
+                            </div>
+                            </div>
+                        <?php endif; ?>
+                    </ul>
+                    <?php if ($showCarrierNotice): ?>
+                        <p class="disclaimer" id="disclaimer_<?php echo $code ?>" ><?php echo $showCarrierNotice; ?></p>
+                    <?php endif ?>
+                    <?php if($isPickupCarrier) :?>
+                            <?php echo $this->getStorepickupHtml($code, $_rates[0]->getCarrierType()) ?>
+                    <?php endif ?>
+                    <?php if($isFreightCarrier) :?>
+                        <?php echo $this->getFreightAccessorialsHtml($code, $_rates[0]->getCarrierType(), '') ?>
+                    <?php endif ?>
+                </dd>
+            <?php endforeach; ?>
+        </dl>
+    <?php endif; ?>
+<?php else: ?>
+    <?php if (!($_carrierGroupRates = $this->getCarrierGroupRates())): ?>
+        <strong><?php echo $this->__('Sorry, no quotes are available for this order at this time.') ?></strong>
+    <?php else: ?>
+        <input type=hidden id="transaction_id" value='<?php echo Mage::helper('shipperhq_shipper')->getTransactionId(); ?>' />
+        <?php foreach ($_carrierGroupRates as $_carriergroupId => $_shippingRateGroups): ?>
+            <input type=hidden id="carriergroup_id" value='<?php echo $_carriergroupId ?>' />
+            <?php $_sole = count($_shippingRateGroups['shipping']) == 1; ?>
+            <dt class="carrier-group-name"><br><?php echo $_shippingRateGroups['checkout_text']; ?>
+                <?php if ($_showTooltip): ?>
+                    <b class="helpcursor" title="<?php echo $this->getToolTipText() ?>">
+                        <img src="<?php echo $this->getSkinUrl('images/shipperhq/tooltip.jpg') ?>">
+                    </b>
+                <?php endif ?>
+            </dt>
+            <ul>
+                <?php if ($this->showItemDescription()) :?>
+                    <?php if(array_key_exists('item_list', $_shippingRateGroups) && $_shippingRateGroups['item_list']): ?>
+                        <?php foreach ($_shippingRateGroups['item_list'] as $_formattedItemDetail): ?>
+                            <li class="carrier-group-items">
+                                <?php echo $_formattedItemDetail ?>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </ul>
+            <dl class="sp-methods">
+                <?php foreach ($_shippingRateGroups['shipping'] as $code => $_rates): ?>
+                    <dt><br><strong><?php echo $this->getCarrierName($code) ?></strong></dt>
+                    <dd>
+                        <?php $showCarrierNotice = false; ?>
+                        <?php if(Mage::helper('shipperhq_shipper')->isModuleEnabled('Shipperhq_Calendar') && Mage::helper('shipperhq_calendar')->hasCalendarDetails($_carriergroupId, $code, $_rates[0]->getCarrierType())) :?>
+                            <?php $calendarRates = true; ?>
+                        <?php else: ?>
+                            <?php $calendarRates = false; ?>
+                        <?php endif ?>
+                        <?php $isPickupCarrier = $this->isPickupCarrier($_rates[0]);?>
+                        <?php $isFreightCarrier = $this->isFreightCarrier($_rates[0]); ?>
+                        <?php if($_rates[0]->getCustomDescription()): ?>
+                            <p class="disclaimer" id="disclaimer_<?php echo $_carriergroupId ?>_<?php echo $code ?>" name="disclaimer_<?php echo $_carriergroupId ?>"><?php echo $_rates[0]->getCustomDescription(); ?></p>
+                        <?php endif; ?>
+                        <ul>
+                            <?php if($calendarRates || $isPickupCarrier || $isFreightCarrier): ?>
+                        <div id="ship_options_<?php echo $_carriergroupId ?>_<?php echo $code ?>"?>
+                            <div id="radio_choices_<?php echo $_carriergroupId ?>_<?php echo $code ?>">
+                                <?php endif ?>
+                                <?php  $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
+                                    <li>
+                                        <?php if ($_rate->getErrorMessage()): ?>
+                                            <ul class="messages"><li class="error-msg"><ul><li><?php echo $_rate->getErrorMessage() ?></li></ul></li></ul>
+                                        <?php else: ?>
+                                            <?php if($_rate->getCarrierNotice() && !$showCarrierNotice): ?>
+                                                <?php $showCarrierNotice = $_rate->getCarrierNotice(); ?>
+                                            <?php endif ?>
+                                            <?php if ($_sole) : ?>
+                                                <input name="shipping_method_<?php echo $_carriergroupId ?>" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_carriergroupId ?>_<?php echo $_rate->getCode() ?>" />
+                                            <?php else: ?>
+                                                <input name="shipping_method_<?php echo $_carriergroupId ?>" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_carriergroupId ?>_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getCarrierGroupAddressShippingMethod($_carriergroupId)) echo ' checked="checked"' ?> />
+                                            <?php endif ?>
+                                            <label for="s_method_<?php echo $_carriergroupId ?>_<?php echo $_rate->getCode() ?>"><?php echo $this->getMethodTitle($_rate->getMethodTitle(), $_rate->getMethodDescription(), true) ?>
+                                                <strong>
+                                                    <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
+                                                    <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
+
+                                                    <?php echo $_excl; ?>
+                                                    <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                                                        (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                                                    <?php endif; ?>
+                                                </strong>
+                                            </label>
+
+                                        <?php endif ?>
+                                    </li>
+                                <?php endforeach; ?>
+                                <?php if($calendarRates): ?>
+                                    </div>
+                                    </div>
+                                    <?php echo $this->getCalendarHtml($_carriergroupId, $code, $_sole) ?>
+                                <?php endif ?>
+                                <?php if($isPickupCarrier || $isFreightCarrier): ?>
+                                    </div>
+                                    </div>
+                                <?php endif; ?>
+                        </ul>
+                        <?php if ($showCarrierNotice): ?>
+                            <p class="disclaimer" id="disclaimer_<?php echo $code ?>" ><?php echo $showCarrierNotice; ?></p>
+                        <?php endif ?>
+                        <?php if($isPickupCarrier) :?>
+                            <?php echo $this->getStorepickupHtml($code, $_rates[0]->getCarrierType(), $_carriergroupId) ?>
+                        <?php endif ?>
+                        <?php if($isFreightCarrier) :?>
+                            <?php echo $this->getFreightAccessorialsHtml($code, $_rates[0]->getCarrierType(), $_carriergroupId) ?>
+                        <?php endif ?>
+                    </dd>
+                <?php endforeach; ?>
+            </dl>
+        <?php endforeach; ?>
+        <!--  <div class="dropship-text">
+            <?php echo $this->getExplanationText(); ?>
+        </div> -->
+    <?php endif; ?>
+<?php endif; ?>
+
+
+<script type="text/javascript">
+    //<![CDATA[
+    if (typeof ShippingMethod != "undefined") {
+        ShippingMethod.prototype.validate = function() {
+            var methods = document.getElementsByName('invalid_shipping');
+            if (methods.length!=0) {
+                alert(Translator.translate('Your order can not be completed at this time as there are no shipping carriers available for it. Please make neccessary changes in your shipping address.'));
+                return false;
+            }
+            if(this.validator) {
+                if(!this.validator.validate()) {
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        ShippingMethod.prototype.isValid = function () {
+            this.errorEl.__advicevalidateAjax = 1;
+            Validation.reset(this.errorEl);
+            var methods = document.getElementsByName('invalid_shipping');
+            if (methods.length!=0) {
+                Validation.ajaxError(this.errorEl, Translator.translate('Your order cannot be completed at this time as there is no shipping methods available for it. Please make neccessary changes in your shipping address.'));
+                return false;
+            }
+
+            var shippingMethodSection = $('checkout-shipping-method-load');
+            var carrierGroupCount = shippingMethodSection.select('dl').length;
+            var selectedMethods = 0;
+
+            shippingMethodSection.select('input[type=radio]:checked').each(function(){
+                selectedMethods++;
+            });
+
+            if(carrierGroupCount == selectedMethods){
+                return true;
+            }
+
+            Validation.ajaxError(this.errorEl, Translator.translate('Please specify shipping method.'));
+            return false;
+
+        };
+    }
+    //]]>
+</script>
+

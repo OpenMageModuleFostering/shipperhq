@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Shipperhq_Paypalexpress>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Paypal />
+            </depends>
+        </Shipperhq_Paypalexpress>
+    </modules>
+</config>

@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+/**
+*
+* Webshopapps Shipping Module
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Open Software License (OSL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/osl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@magentocommerce.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade Magento to newer
+* versions in the future. If you wish to customize Magento for your
+* needs please refer to http://www.magentocommerce.com for more information.
+*
+* Shipper HQ Shipping
+*
+* @category ShipperHQ
+* @package ShipperHQ_Shipping_Carrier
+* @copyright Copyright (c) 2014 Zowta LLC (http://www.ShipperHQ.com)
+* @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+* @author ShipperHQ Team sales@shipperhq.com
+*/
+-->
+<config>
+    <modules>
+        <Shipperhq_Shipper>
+            <version>0.0.30</version>
+            <extension_version>2.52</extension_version>
+            <!-- implemented in module file -->
+            <!--  <active>true</active>
+              <codePool>community</codePool>
+              <depends>
+                  <Mage_Shipping/>
+              </depends> -->
+        </Shipperhq_Shipper>
+    </modules>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Shipperhq_Shipper after="Mage_Adminhtml">Shipperhq_Shipper_Adminhtml</Shipperhq_Shipper>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <global>
+        <blocks>
+            <shipperhq_shipper>
+                <class>Shipperhq_Shipper_Block</class>
+            </shipperhq_shipper>
+        </blocks>
+        <helpers>
+            <shipperhq_shipper>
+                <class>Shipperhq_Shipper_Helper</class>
+            </shipperhq_shipper>
+        </helpers>
+        <models>
+            <shipperhq_shipper>
+                <class>Shipperhq_Shipper_Model</class>
+                <resourceModel>shipperhq_shipper_resource</resourceModel>
+            </shipperhq_shipper>
+            <shipperhq_shipper_resource>
+                <class>Shipperhq_Shipper_Model_Resource</class>
+                <entities>
+                    <attributeupdate>
+                        <table>shipperhq_synchronize</table>
+                    </attributeupdate>
+                    <storage>
+                        <table>shipperhq_storage</table>
+                    </storage>
+                    <quote_packages>
+                        <table>shipperhq_quote_packages</table>
+                    </quote_packages>
+                    <quote_package_items>
+                        <table>shipperhq_quote_package_items</table>
+                    </quote_package_items>
+                    <order_packages>
+                        <table>shipperhq_order_packages</table>
+                    </order_packages>
+                    <order_package_items>
+                        <table>shipperhq_order_package_items</table>
+                    </order_package_items>
+                </entities>
+            </shipperhq_shipper_resource>
+            <sales>
+                <rewrite>
+                    <quote_address_rate>Shipperhq_Shipper_Model_Sales_Quote_Address_Rate</quote_address_rate>
+                </rewrite>
+            </sales>
+        </models>
+        <resources>
+            <shipperhq_shipper_setup>
+                <setup>
+                    <module>Shipperhq_Shipper</module>
+                    <class>Mage_Eav_Model_Entity_Setup</class>
+                </setup>
+            </shipperhq_shipper_setup>
+        </resources>
+        <events>
+            <!--method title synchronize with ShipperHQ -->
+            <admin_system_config_changed_section_carriers>
+                <observers>
+                    <shipperhq_shipper_observer>
+                        <class>Shipperhq_Shipper_Model_Observer</class>
+                        <method>updateTitles</method>
+                    </shipperhq_shipper_observer>
+                </observers>
+            </admin_system_config_changed_section_carriers>
+            <!-- set renderer for dimensional elements -->
+            <adminhtml_catalog_product_edit_prepare_form>
+                <observers>
+                    <shipperhq_shipper_observer>
+                        <class>Shipperhq_Shipper_Model_Observer</class>
+                        <method>catalogProductEditSetRenderer</method>
+                    </shipperhq_shipper_observer>
+                </observers>
+            </adminhtml_catalog_product_edit_prepare_form>
+            <!-- add dependency for dimensional fields on product edit -->
+            <catalog_product_edit_form_render_packingboxes>
+                <observers>
+                    <shipperhq_shipper_observer>
+                        <class>Shipperhq_Shipper_Model_Observer</class>
+                        <method>prepareProductEditFormDimensional</method>
+                    </shipperhq_shipper_observer>
+                </observers>
+            </catalog_product_edit_form_render_packingboxes>
+            <!-- check cart display items required -->
+            <core_block_abstract_to_html_before>
+                <observers>
+                    <shipperhq_shipper_cart_estimate_display>
+                        <class>shipperhq_shipper/observer</class>
+                        <method>checkCartDisplayRequired</method>
+                    </shipperhq_shipper_cart_estimate_display>
+                </observers>
+            </core_block_abstract_to_html_before>
+            <!-- set checkout flag for rates processing -->
+            <controller_action_predispatch_checkout_onepage_saveBilling>
+                <observers>
+                    <shipperhq_shipper_savebilling_observer>
+                        <class>shipperhq_shipper/observer</class>
+                        <method>onCheckoutSaveBilling</method>
+                    </shipperhq_shipper_savebilling_observer>
+                </observers>
+            </controller_action_predispatch_checkout_onepage_saveBilling>
+            <!-- set checkout for rates processing and re-request rates if it's split checkout -->
+            <controller_action_predispatch_onestepcheckout_index_index>
+                <observers>
+                    <shipperhq_shipper_onestepcheckout_predispatch_observer>
+                        <class>shipperhq_shipper/observer</class>
+                        <method>onOneStepCheckoutIndex</method>
+                    </shipperhq_shipper_onestepcheckout_predispatch_observer>
+                </observers>
+            </controller_action_predispatch_onestepcheckout_index_index>
+            <!-- set cart flag for rate request -->
+            <controller_action_predispatch_checkout_cart_estimatePost>
+                <observers>
+                    <shipperhq_shipper_estimatepost_observer>
+                        <class>shipperhq_shipper/observer</class>
+                        <method>onCheckoutCartEstimatePost</method>
+                    </shipperhq_shipper_estimatepost_observer>
+                </observers>
+            </controller_action_predispatch_checkout_cart_estimatePost>
+            <!-- set cart flag for rate request -->
+            <controller_action_predispatch_checkout_cart_index>
+                <observers>
+                    <shipperhq_shipper_estimatepost_observer>
+                        <class>shipperhq_shipper/observer</class>
+                        <method>onCheckoutCartEstimatePost</method>
+                    </shipperhq_shipper_estimatepost_observer>
+                </observers>
+            </controller_action_predispatch_checkout_cart_index>
+            <!--set cart flag for rate request -->
+            <checkout_type_multishipping_set_shipping_items>
+                <observers>
+                    <shipperhq_shipper_multishipping_observer>
+                        <class>shipperhq_shipper/observer</class>
+                        <method>multiCheckoutShippingPredispatch</method>
+                    </shipperhq_shipper_multishipping_observer>
+                </observers>
+            </checkout_type_multishipping_set_shipping_items>
+            <!-- initialize storage on quote after load -->
+            <sales_quote_load_after>
+                <observers>
+                    <shipperhq_shipper_observer>
+                        <class>shipperhq_shipper/observer</class>
+                        <method>onQuoteAfterLoad</method>
+                    </shipperhq_shipper_observer>
+                </observers>
+            </sales_quote_load_after>
+            <!-- saves storage on quote after save -->
+            <sales_quote_save_after>
+                <observers>
+                    <shipperhq_shipper_observer>
+                        <class>shipperhq_shipper/observer</class>
+                        <method>onQuoteAfterSave</method>
+                    </shipperhq_shipper_observer>
+                </observers>
+            </sales_quote_save_after>
+            <!-- saves unsaved storage objects -->
+            <controller_action_postdispatch>
+                <observers>
+                    <shipperhq_shipper_observer>
+                        <class>shipperhq_shipper/observer</class>
+                        <method>onPostDispatch</method>
+                    </shipperhq_shipper_observer>
+                </observers>
+            </controller_action_postdispatch>
+            <create_order_session_quote_initialized>
+                <observers>
+                    <shipperhq_shipper_observer>
+                        <class>shipperhq_shipper/observer</class>
+                        <method>setCurrentQuoteObjectInAdmin</method>
+                    </shipperhq_shipper_observer>
+                </observers>
+            </create_order_session_quote_initialized>
+            <adminhtml_sales_order_create_process_data_before>
+                <observers>
+                    <shipperhq_shipper_observer>
+                        <class>shipperhq_shipper/observer</class>
+                        <method>setCurrentQuoteObjectInAdminFromSaveData</method>
+                    </shipperhq_shipper_observer>
+                </observers>
+            </adminhtml_sales_order_create_process_data_before>
+            <sales_order_place_after>
+                <observers>
+                    <shipperhq_shipper_placeorder_observer>
+                        <class>shipperhq_shipper/observer</class>
+                        <method>saveOrderAfter</method>
+                    </shipperhq_shipper_placeorder_observer>
+                </observers>
+            </sales_order_place_after>
+            <!--admin shipper observer -->
+            <adminhtml_sales_order_create_process_data_before>
+                <observers>
+                    <shipperhq_shipper_admin_create_order>
+                        <class>shipperhq_shipper/observer</class>
+                        <method>adminSalesOrderCreateProcessDataBefore</method>
+                    </shipperhq_shipper_admin_create_order>
+                </observers>
+            </adminhtml_sales_order_create_process_data_before>
+            <!--save shipping details and reserve order process OPC-->
+            <checkout_controller_onepage_save_shipping_method>
+                <observers>
+                    <shipperhq_shipper_save_shipping_method>
+                        <type>model</type>
+                        <class>shipperhq_shipper/observer_order</class>
+                        <method>saveShippingMethod</method>
+                    </shipperhq_shipper_save_shipping_method>
+                </observers>
+            </checkout_controller_onepage_save_shipping_method>
+            <!--save shipping details and reserve order process MAC -->
+            <checkout_controller_multishipping_shipping_post>
+                <observers>
+                    <shipperhq_shipper_save_shipping_method_multi>
+                        <type>singleton</type>
+                        <class>shipperhq_shipper/observer_order</class>
+                        <method>saveShippingMethodMulti</method>
+                    </shipperhq_shipper_save_shipping_method_multi>
+                </observers>
+            </checkout_controller_multishipping_shipping_post>
+            <!--save shipping details and reserve order process OSC -->
+            <controller_action_predispatch_onestepcheckout_ajax_set_methods_separate>
+                <observers>
+                    <shipperhq_shipper_onestepcheckout_ajax_setmethodsseparate>
+                        <class>shipperhq_shipper/observer_order</class>
+                        <method>preDispatchSetMethodsSeparate</method>
+                    </shipperhq_shipper_onestepcheckout_ajax_setmethodsseparate>
+                </observers>
+            </controller_action_predispatch_onestepcheckout_ajax_set_methods_separate>
+            <!--save shipping details and reserve order process ADMIN -->
+            <adminhtml_sales_order_create_process_data_before>
+                <observers>
+                    <shipperhq_shipper_save_shipping_methods_observer>
+                        <class>shipperhq_shipper/observer_order</class>
+                        <method>saveShippingMethodAdmin</method>
+                    </shipperhq_shipper_save_shipping_methods_observer>
+                </observers>
+            </adminhtml_sales_order_create_process_data_before>
+            <!-- confirm order processing OPC-->
+            <checkout_onepage_controller_success_action>
+                <observers>
+                    <shipperhq_shipper_onpage_success>
+                        <type>model</type>
+                        <class>shipperhq_shipper/observer_order</class>
+                        <method>checkoutOnepageSuccess</method>
+                    </shipperhq_shipper_onpage_success>
+                </observers>
+            </checkout_onepage_controller_success_action>
+            <!-- confirm order processing MAC -->
+            <checkout_multishipping_controller_success_action>
+                <observers>
+                    <shipperhq_shipper_multiaddress_success>
+                        <class>shipperhq_shipper/observer_order</class>
+                        <method>checkoutMulitaddressSuccess</method>
+                    </shipperhq_shipper_multiaddress_success>
+                </observers>
+            </checkout_multishipping_controller_success_action>
+            <!--save item detail -->
+            <sales_convert_quote_item_to_order_item>
+                <observers>
+                    <shipperhq_splitrates_quoteitem_orderitem>
+                        <type>singleton</type>
+                        <class>shipperhq_shipper/observer</class>
+                        <method>salesConvertQuoteItemToOrderItem</method>
+                    </shipperhq_splitrates_quoteitem_orderitem>
+                </observers>
+            </sales_convert_quote_item_to_order_item>
+        </events>
+        <fieldsets>
+            <sales_convert_quote_address>
+                <dispatch_date>
+                    <to_order>*</to_order>
+                </dispatch_date>
+                <delivery_date>
+                    <to_order>*</to_order>
+                </delivery_date>
+                <carrier_type>
+                    <to_order>*</to_order>
+                </carrier_type>
+                <carrier_id>
+                    <to_order>*</to_order>
+                </carrier_id>
+                <carriergroup>
+                    <to_order>*</to_order>
+                </carriergroup>
+                <carriergroup_shipping_details>
+                    <to_order>*</to_order>
+                </carriergroup_shipping_details>
+                <carriergroup_shipping_html>
+                    <to_order>*</to_order>
+                </carriergroup_shipping_html>
+            </sales_convert_quote_address>
+            <sales_convert_order>
+                <dispatch_date>
+                    <to_quote_address_shipping>*</to_quote_address_shipping>
+                </dispatch_date>
+                <delivery_date>
+                    <to_quote_address_shipping>*</to_quote_address_shipping>
+                </delivery_date>
+                <carrier_type>
+                    <to_quote_address_shipping>*</to_quote_address_shipping>
+                </carrier_type>
+                <carrier_id>
+                    <to_quote_address_shipping>*</to_quote_address_shipping>
+                </carrier_id>
+                <carriergroup>
+                    <to_quote_address_shipping>*</to_quote_address_shipping>
+                </carriergroup>
+                <carriergroup_shipping_details>
+                    <to_quote_address_shipping>*</to_quote_address_shipping>
+                </carriergroup_shipping_details>
+                <carriergroup_shipping_html>
+                    <to_quote_address_shipping>*</to_quote_address_shipping>
+                </carriergroup_shipping_html>
+            </sales_convert_order>
+            <sales_convert_quote_item>
+                <carriergroup>
+                    <to_order_item>*</to_order_item>
+                </carriergroup>
+                <carriergroup_id>
+                    <to_order_item>*</to_order_item>
+                </carriergroup_id>
+                <carriergroup_shipping>
+                    <to_order_item>*</to_order_item>
+                </carriergroup_shipping>
+            </sales_convert_quote_item>
+            <sales_convert_order_item>
+                <carriergroup>
+                    <to_quote_item>*</to_quote_item>
+                </carriergroup>
+                <carriergroup_id>
+                    <to_quote_item>*</to_quote_item>
+                </carriergroup_id>
+                <carriergroup_shipping>
+                    <to_quote_item>*</to_quote_item>
+                </carriergroup_shipping>
+            </sales_convert_order_item>
+        </fieldsets>
+        <sales>
+            <shipping>
+                <carriers>
+                    <shipper1>
+                        <class>Shipperhq_Shipper_Model_Carrier_Shipper</class>
+                    </shipper1>
+                    <shipperadmin>
+                        <class>Shipperhq_Shipper_Model_Carrier_Shipperadmin</class>
+                    </shipperadmin>
+                </carriers>
+            </shipping>
+            <quote>
+                <item>
+                    <product_attributes>
+                        <shipperhq_shipping_group/>
+                        <shipperhq_warehouse/>
+                        <shipperhq_shipping_qty/>
+                        <shipperhq_shipping_fee/>
+                        <shipperhq_additional_price/>
+                        <freight_class/>
+                        <must_ship_freight/>
+                        <shipperhq_nmfc_class/>
+                        <shipperhq_nmfc_sub/>
+                        <shipperhq_handling_fee/>
+                        <shipperhq_carrier_code/>
+                        <shipperhq_volume_weight/>
+                        <shipperhq_declared_value/>
+                        <ship_separately/>
+                        <shipperhq_dim_group/>
+                        <ship_box_tolerance/>
+                        <ship_length/>
+                        <ship_width/>
+                        <ship_height/>
+                        <length/>
+                        <width/>
+                        <height/>
+                        <shipperhq_poss_boxes/>
+                        <shipperhq_master_boxes/>
+                        <package_id/>
+                        <special_shipping_group/>
+                        <volume_weight/>
+                        <warehouse/>
+                        <handling_id/>
+                        <package_type/>
+                        <packing_section_name/>
+                        <shipperhq_malleable_product/>
+                    </product_attributes>
+                </item>
+            </quote>
+        </sales>
+    </global>
+    <frontend>
+        <translate>
+            <modules>
+                <shipperhq_shipper>
+                    <files>
+                        <default>Shipperhq_Shipper.csv</default>
+                    </files>
+                </shipperhq_shipper>
+            </modules>
+        </translate>
+    </frontend>
+    <adminhtml>
+        <layout>
+            <updates>
+                <shipperhq_shipper module="Shipperhq_Shipper">
+                    <file>shipperhq/shipper.xml</file>
+                </shipperhq_shipper>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Shipperhq_Shipper>
+                    <files>
+                        <default>Shipperhq_Shipper.csv</default>
+                    </files>
+                </Shipperhq_Shipper>
+            </modules>
+        </translate>
+        <events>
+            <sales_order_place_after>
+                <observers>
+                    <shipperhq_shipper_save_order_observer>
+                        <class>shipperhq_shipper/observer_order</class>
+                        <method>adminOrderSaveAfter</method>
+                    </shipperhq_shipper_save_order_observer>
+                </observers>
+            </sales_order_place_after>
+            <sales_order_shipment_save_after>
+                <observers>
+                    <shipperhq_shipper_save_shipment_observer>
+                        <type>model</type>
+                        <class>shipperhq_shipper/observer_shipment</class>
+                        <method>processShipmentAddon</method>
+                    </shipperhq_shipper_save_shipment_observer>
+                </observers>
+            </sales_order_shipment_save_after>
+        </events>
+    </adminhtml>
+    <default>
+        <carriers>
+            <shipper>
+                <active>0</active>
+                <title>Shipping Rates</title>
+                <api_key backend_model="adminhtml/system_config_backend_encrypted">
+                    ZcmhDy912bavqmBnzMs6PCcUgQfv8ek82ty+zb9EBW4=
+                </api_key>
+                <password backend_model="adminhtml/system_config_backend_encrypted">
+                    DTAzdo8+0u4DbuvI5NgP8V711uNH6COXD/e821CQSmY6gfOzH1enxEVmexG2sPbEQQGDbEelSQ4=
+                </password>
+                <url>http://sandbox.shipperhq.com/v1/</url>
+                <live_url>http://api.shipperhq.com/v1/</live_url>
+                <secure_url>https://api.shipperhq.com/v1/</secure_url>
+                <model>shipperhq_shipper/carrier_shipper</model>
+                <sandbox_mode>0</sandbox_mode>
+                <environment_scope>LIVE</environment_scope>
+                <hide_notify>0</hide_notify>
+                <display_transaction>0</display_transaction>
+                <sallowspecific>0</sallowspecific>
+                <showerrors>0</showerrors>
+                <showmethod>1</showmethod>
+                <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this
+                    shipping method, please contact us.
+                </specificerrmsg>
+                <ws_timeout>120</ws_timeout>
+                <is_enterprise>0</is_enterprise>
+            </shipper>
+            <shipperadmin>
+                <active>1</active>
+                <title>Custom Shipping Rate</title>
+                <model>shipperhq_shipper/carrier_shipperadmin</model>
+            </shipperadmin>
+        </carriers>
+    </default>
+</config>
