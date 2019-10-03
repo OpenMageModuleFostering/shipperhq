@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/ShipperHQ",
+    "name": "OpenMageModuleFostering\/ShipperHQ",
     "type": "magento-module",
     "license": "OSL-v3.0",
     "homepage": "",
     "description": "The Ultimate Shipping Rate Management Platform",
     "authors": [
-    {
-        "name": "Karen Baker",
-        "email": "sales@webshopapps.com"
-    }
-],
+        {
+            "name": "Karen Baker",
+            "email": "sales@webshopapps.com"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
